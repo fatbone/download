@@ -1,0 +1,300 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Auto commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Remove any trailing whiltespaces in the file
+autocmd BufRead,BufWrite  * if ! &bin | silent! %s/\s\+$//ge | endif
+
+autocmd BufRead,BufNewFile  *.hcpp setfiletype=cpp
+autocmd BufRead,BufNewFile  *.icpp setfiletype=cpp
+autocmd BufRead,BufNewFile  *.hxx  setfiletype=cpp
+autocmd BufRead,BufNewFile  *.hpp  setfiletype=cpp
+autocmd BufRead,BufNewFile  *.cxx  setfiletype=cpp
+autocmd BufRead,BufNewFile  *.cc   setfiletype=cpp
+
+" Set working folder according to opened file
+autocmd BufEnter *  silent! lcd %:p:h
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Install plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Necessary for lots of cool vim things
+set nocompatible
+
+call pathogen#infect()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Basics vim setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = ","
+
+set showcmd
+
+filetype on
+filetype plugin on
+syntax enable
+
+set expandtab
+set smarttab
+set autoindent
+
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+colorscheme torte
+set background=dark
+
+set diffopt+=iwhite
+set diffexpr=""
+set wildmenu
+set wildmode=list:longest,full
+
+set mouse=a
+
+set backspace=2
+set number
+
+set ignorecase
+
+set smartcase
+
+set incsearch
+set hlsearch
+
+" When I close a tab, remove the buffer
+set nohidden
+
+" Customize colors
+highlight MatchParen ctermbg=4
+highlight Pmenu ctermfg=14 ctermbg=91
+highlight PmenuSel ctermfg=14 ctermbg=5
+highlight DiffAdd cterm=bold ctermfg=2 ctermbg=17
+highlight DiffDelete cterm=bold ctermfg=2 ctermbg=17
+highlight DiffChange cterm=bold ctermfg=2 ctermbg=17
+highlight DiffText cterm=bold ctermfg=2 ctermbg=52
+highlight YcmWarningSection ctermbg=52 guibg=#3f0000
+highlight YcmWarningSign ctermbg=52 guibg=#3f0000
+highlight YcmErrorSection ctermbg=161
+highlight YcmErrorSign ctermbg=161
+highlight Groupl ctermbg=4
+highlight Group2 ctermbg=91
+highlight Group3 ctermbg=17
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+"Status line gnarliness
+set laststatus=2
+set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+
+"enable persistence undo
+if has("persistent_undo")
+    set undofile
+    set undodir=$HOME/.vim/vimundo
+endif
+
+"windows navigation
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-j> :wincmd j<CR>
+nmap <silent> <C-k> :wincmd k<CR>
+nmap <silent> <C-l> :wincmd l<CR>
+
+"* search selected text
+vmap * y:let @/ = @"<CR>
+
+" jmp list, navigation history
+noremap <ESC>h  <C-O>
+noremap <ESC>l  <C-I>
+
+" clear highlighing on escape in normal node
+nnoremap <ESC> :noh<RETURN><ESC>
+
+nmap ]b <ESC>:bn<RETURN>
+nmap [b <ESC>:bp<RETURN>
+
+nnoremap <Tab>    :tabn<CR>
+nnoremap <S-Tab>  :tabp<CR>
+noremap  ]t :tabnext<CR>
+noremap  [t :tabprevious<CR>
+noremap  te :tabedit %<CR>
+noremap  tc :tabclose<CR>
+
+" search will center on the line it's found in
+map N Nzz
+map n nzz
+
+" quick fix
+set grepprg=grep\ -nH\ $*
+nnoremap gr :execute "vimgrep /" . expand("<cword>") . "/j **/*.*"<CR>
+nnoremap gR :execute "vimgrep /" . expand("<cword>") . "/j ../**/*.*"<CR>
+
+"at logging lines as messages
+set errorformat^=%+G%[0123456789]%[0123456789]:%[0123456789]%[0123456789]:%.%#
+
+autocmd QuickFixCmdPost  [^l]*   nested cwindow 22
+autocmd QuickFixCmdPost     l*   nested cwindow 22
+autocmd QuickFixCmdPost  *grep*  cwindow 22
+
+"auto close vi if only quickfix windows left
+autocmd bufenter * if (winnr("$") == 1 && getbufvar(winbufnr(winnr()), "&buftype") == "quickfix") | q | endif
+
+"error list
+nnoremap  ]q :cnext<CR>
+nnoremap  [q :cprevious<CR>
+"location list
+nnoremap  ]l :lnext<CR>
+nnoremap  [l :lprevious<CR>
+"toggle quick fix window
+noremap <silent> <ESC>q :call QFixToggle()<CR><Esc>
+
+function! QFixToggle()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+        copen 22
+    else
+        cclose
+    endif
+endfunction
+
+"customized command
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+command! Changes leftabove vertical new | set bt=nofile | read # | 0d_ | diffthis | wincmd p | diffthis
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin Customization
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" switch between cpp and header
+noremap <m-o> :A<CR><Esc>
+noremap <ESC>o :A<CR><Esc>
+
+" easymotion
+map <Leader>f <Plug>(easymotion-bd-f)
+map <Leader>f <Plug>(easymotion-overwin-f)
+
+" ycm
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_global_ycm_extra_conf = "~/.ycm_extra_conf.py"
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+nnoremap <Leader>gc :YcmCompleter GotoDeclaration<CR>
+nnoremap <Leader>gd :YcmCompleter GotoDefinition<CR>
+nnoremap <silent> <ESC>g :YcmCompleter GotoDefinitionElseDeclaration<CR>
+nnoremap <Leader>gf :YcmCompleter FixIt<CR>
+
+" airline
+let g:airline#extensions#tabline#fnamemode = ':t'
+let g:airline_section_b = ''
+let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#_restore__#'
+let g:airline_section_z = '%l,%v/%L'
+let g:airline_skip_empty_sections = 1
+let g:airline_inactive_collapes = 1
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+
+let g:clang_format_style='{BasedOnStyle: Microsoft, IndentWidth: 4, TabWidth: 4, Standard: Cpp11}'
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+
+" ctrlP
+let g:ctrlp_types = ['fil', 'buf', 'mru']
+let g:ctrlp_extensions = ['tag', 'quickfix', 'line']
+let g:ctrlp_map = '<Leader>p'
+let g:ctrlp_cmd = 'CtrlP'
+"mru
+let g:ctrlp_mruf_exclude = '\v[\/](build)|(\.(git|hg|svn|idea)).*'
+let g:ctrlp_mruf_relative = 1
+let g:ctrlp_mruf_max = 30
+"default search filename
+let g:ctrlp_by_filename = 1
+let g:ctrlp_reqexp = 1
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30,results:30'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_root_markers = ['.fuzzyfiles']
+let g:ctrlp_max_depth = 10
+let g:ctrlp_switch_buffer = 'et'
+let g:ctrlp_custom_ignore = {
+   \ 'dir': '\v[\/](build)|(\.(git|hg|svn|idea))$',
+   \ 'file': '\v(tagslcscope.out|cscope.po.out|cscope.po.in)|(\.(cdf|fuzzyfiles|zip|so|a|swP))$',
+   \ }
+let g:ctrlp_prompt_mappings = {
+\ 'PrtSelectMove("j")': ['<c-j>', '<c-n>', '<tab>'],
+\ 'PrtSelectMove("k")': ['<c-k>', '<c-p>', '<s-tab>'],
+\ 'ToggleFocus()': [],
+\ 'PrtExpandDir()': [],
+\ 'PrtHistory(-1)': ['<down>'],
+\ 'PrtHistory(1)': ['<up>'],
+\ }
+
+"keep the cache
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_open_single_match = ['fil', 'buf', 'mru', 'tag', 'line']
+
+"nmap <Leader>p :CtrlP<CR>
+nmap <Leader>u :CtrlPMRU<CR>
+nmap <Leader>b :CtrlPBuffer<CR>
+nmap <Leader>l :CtrlPLine %<CR>
+nmap <Leader>t :call CtrlPTagsUnderCursor()<CR>
+nmap <Leader>w :CtrlPCurWD<CR>
+nmap <Leader>k :CtrlPBufTag<CR>
+
+function! CtrlPTagsUnderCursor()
+try
+    let default_input_save = get(g:, 'ctrlp_default_input', '')
+    let g:ctrlp_default_input = expand('<cword>')
+    :CtrlPBufTagAll
+finally
+    if exists('default_input_save')
+        let g:ctrlp_default_input = default_input_save
+    endif
+endtry
+endfu
+
+
+"NERDTree
+nnoremap <silent> <ESC>1 :call NERDTreeToggleInCurDir()<CR>
+let g:NERDTreeDirArrows=0
+let g:NERDTreeDimArrowExpandable = '>'
+let g:NERDTreeDirArrowCollapsible = 'v'
+let g:NERDTreeIgnore = ['\.pyc$', '\.o$']
+let g:NERDTreeMapOpenSplit='<C-x>'
+let g:NERDTreeMapOpenVSplit='<C-v>'
+let g:NERDTreeMapOpenInTab='<C-t>'
+
+function! NERDTreeToggleInCurDir()
+    "if NERDTree is open in the current buffer
+    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        exe ":NERDTreeClose"
+    else
+        exe ":NERDTreeFind"
+    endif
+endfunction
+
+"auto close vi if only nertdtree windows left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"## netrw
+
+"tagbar
+map <C-o> :TagbarOpenAutoClose<CR>
+nnoremap <silent>  <ESC>7 :TagbarToggle<CR>
+let g:tagbar_left = 0
+let g:tagbar_width = 60
+let g:tagbar_indent = 1
+let g:tagbar_compant = 1
+let g:tagbar_iconchars = ['+', '-']
+
+"tabular
+nmap <Leader>a, :Tabularize /,<CR>
+vmap <Leader>a, :Tabularize /,<CR>
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+
