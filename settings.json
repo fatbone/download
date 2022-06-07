@@ -1,0 +1,145 @@
+{
+    "vim.camelCaseMotion.enable": true,
+    "vim.leader": ",",
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.cursorStylePerMode.insert": "block",
+    "vim.cursorStylePerMode.normal": "block",
+    "vim.easymotion": true,
+    "vim.handleKeys": {
+        "<C-f>": true,
+        "<C-b>": true,
+        "<C-v>": true,
+        "<C-a>": false,
+        "<C-c>": false,
+        "<C-d>": false,
+        "<C-o>": false,
+        "<C-u>": false,
+        "<C-x>": false,
+        "<C-y>": false,
+        "<C-z>": false
+    },
+    "vim.commandLineModeKeyBindings": [
+    ], 
+    "vim.insertModeKeyBindings": [
+        {
+            "before" : ["j", "j"],
+            "after": ["<Esc>"]
+        }
+    ], 
+    "vim.visualModeKeyBindings": [
+        {
+            "before" : [">"],
+            "after": [">", "g", "v"]
+        },
+        {
+            "before" : ["<"],
+            "after": ["<", "g", "v"]
+        }
+    ], 
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before" : ["leader", "f"],
+            "after": ["leader", "leader", "s"]
+        },
+        {
+            "before" : ["<C-h>"],
+            "commands": [ "workbench.action.navigateLeft"]
+        },
+        {
+            "before" : ["<C-l>"],
+            "commands": [ "workbench.action.focusRightGroup"]
+        },
+        {
+            "before" : ["<C-k>"],
+            "commands": [ "workbench.action.focusAboveGroup"]
+        },
+        {
+            "before" : ["<C-j>"],
+            "commands": [ "workbench.action.navigateRight"]
+        },
+        {
+            "before" : ["<C-o>"],
+            "commands": [ "workbench.action.toggleAuxiliaryBar"],
+            "when": [ "editorTextFocus"]
+        },
+        {
+            "before" : ["<tab>"],
+            "commands": [ "workbench.action.nextEditor"]
+        },
+        {
+            "before" : ["<S-tab>"],
+            "commands": [ "workbench.action.previousEditor"]
+        },
+        {
+            "before" : ["<Esc>"],
+            "commands": [ ":nohl"]
+        },
+        {
+            "before" : ["leader", "k"],
+            "commands": [ "workbench.action.gotoSymbol"]
+        },
+        {
+            "before" : ["leader", "c", " "],
+            "commands": [ "editor.action.commentLine"]
+        },
+        {
+            "before" : ["leader", "p"],
+            "commands": [ "workbench.action.quickOpen"]
+        },
+        {
+            "before" : ["leader", "b"],
+            "commands": [ "workbench.action.showAllEditorsByMostRecentlyUsed"]
+        },
+        {
+            "before" : ["t", "c"],
+            "commands": [ "workbench.action.closeActiveEditor"]
+        },
+        {
+            "before" : [ "]", "c"],
+            "commands": [ "workbench.action.editor.nextChange"]
+        },
+        {
+            "before" : [ "[", "c"],
+            "commands": [ "workbench.action.editor.previousChange"]
+        }
+    ], 
+   "editor.showFoldingControls": "always",
+   "omnisharp.enableRoslynAnalyzers" : true,
+   "omnisharp.enableMsBuildLoadProjectOnDemand" : true,
+   "omnisharp.projectLoadTimeout" : 120,
+   "editor.minimap.enabled" : false,
+   "editor.folding" : false,
+   "editor.lineNumbers" : "on",
+   "editor.roundedSelection": false,
+   "zenMode.hideLineNumbers": false,
+   "vim.statusBarColorControl": true,
+   "vim.statusBarColors.normal": ["#8FBCBB", "#000"],
+   "vim.statusBarColors.insert": ["#BF616A", "#000"],
+   "vim.statusBarColors.visual": ["#B48EAD", "#000"],
+   "vim.statusBarColors.visualline": ["#B48EAD", "#000"],
+   "vim.statusBarColors.visualblock": ["#A3BE8C", "#000"],
+   "vim.statusBarColors.replace": "#D08770",
+   "vim.statusBarColors.commandlineinprogress": "#007ACC",
+   "vim.statusBarColors.searchinprogressmode": "#007ACC",
+   "vim.statusBarColors.easymotionmode": "#007ACC",
+   "vim.statusBarColors.easymotioninputmode": "#007ACC",
+   "vim.statusBarColors.surroundinputmode": "#007ACC",
+   "workbench.colorCustomizations": {
+    "statusBar.background": "#8FBCBB",
+    "statusBar.noFolderBackground": "#8FBCBB",
+    "statusBar.debuggingBackground": "#8FBCBB",
+    "statusBar.foreground": "#000",
+    "statusBar.debuggingForeground": "#000"
+},
+   "workbench.tree.renderIndentGuides": "always",
+   "workbench.tree.indent": 16,
+   "workbench.activityBar.visible": true,
+   "workbench.editor.enablePreview": false,
+   "explorer.openEditors.visible": 0,
+   "update.mode": "manual",
+"extensions.autoUpdate": false,
+"editor.fontSize": 16,
+"cmake.configureOnOpen": true,
+"indentRainbow.indicatorStyle": "light"
+}
